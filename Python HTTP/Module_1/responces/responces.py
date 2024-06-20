@@ -23,7 +23,7 @@ def getCurrentWeather(url: str) -> str:
     res = requests.get(url)
 
     if (res.status_code != 200) or (res.json() == []):
-        raise Exception("error getting weather info:\n", res.text)
+        raise Exception(f"error getting weather info:\n\nCode:{res.status_code} \nResponce:{res.json()}")
         
     jr = res.json()
 
@@ -31,9 +31,7 @@ def getCurrentWeather(url: str) -> str:
     temp = jr.get("main").get("temp")
     country = jr.get("sys").get("country")
 
-    # print(jr)
-
-    weather = f"Tempreature: {temp} ℃; \nDescription: {description}; \nCountry: {country}: \nCity: {City}"
+    weather = f"Tempreature: {temp} ℃; \nDescription: {description}; \nCountry: {country}: \nCity: {City} \nStatusCode:{res.status_code}"
 
     return weather
         
@@ -46,11 +44,10 @@ def getCoordinates(city: str, apiKey: str):
     res = requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={apiKey}")
     
     if (res.status_code != 200) or (res.json() == []):
-        raise Exception("error getting coordinates:", res.text)
+        raise Exception(f"error getting coordinates: \nCode:{res.status_code} \nResponce:{res.json()}")
         
     jr = res.json()
 
-    # print(jr)
 
     lat = jr[0].get("lat")
     lon = jr[0].get("lon")
